@@ -1,52 +1,54 @@
 package edu.andrews.cptr252.ksolomon.cardlet;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class CardletActivity extends AppCompatActivity {
+public class CardletActivity extends SingleFragmentActivity
+        implements CardletActivityFragment.Callbacks, CardletActivityFragment.Callbacks {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cardlet);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+    public void onBugSelected(Card card){
+        if(findViewById(R.id.detailFragmentContainer) == null) {
+            Intent i = new Intent(this, CardDetailsActivity.class);
+            i.putExtra(CardDetailsFragment.EXTRA_BUG_ID, card.getID());
+            startActivityForResult(i, 0);
+        } else {
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            Fragment oldDetail = fm.findFragmentById(R.id.detailFragmentContainer);
+            Fragment newDetail = CardDetailsFragment.newInstance(Card.getID());
+
+            if (oldDetail != null){
+                ft.remove(oldDetail);
             }
-        });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_cardlet, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+            ft.add(R.id.detailFragmentContainer, newDetail);
+            ft.commit();
         }
-
-        return super.onOptionsItemSelected(item);
     }
+    public void onBugUpdated(Card card){
+        FragmentManager fm = getSupportFragmentManager();
+        CardletActivityFragment listFragment = (CardletActivityFragment) fm.findFragmentById(R.id.fragment_container);
+        listFragment.updateUI();
+    }
+
+    @Override
+    protected Fragment createFragment(){
+        return new CardletActivityFragment();
+    }
+
+    @Override
+    protected int getLayoutResId(){
+        return R.layout.activity_masterdetail;
+    }
+
 }
