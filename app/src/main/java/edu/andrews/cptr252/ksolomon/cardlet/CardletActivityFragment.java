@@ -26,6 +26,11 @@ public class CardletActivityFragment extends Fragment {
 
 
     private CardAdapter mAdapter;
+    private ArrayList<Card> mCards;
+    private CheckBox mYesCheckBox;
+    private CheckBox mNoCheckBox;
+    private static final String TAG = "CardletActivityFragment";
+
 
     public interface Callbacks {
         void onCardSelected(Card card);
@@ -75,7 +80,7 @@ public class CardletActivityFragment extends Fragment {
             }
             public boolean onCreateActionMode(ActionMode mode, Menu menu){
                 MenuInflater inflater = mode.getMenuInflater();
-                inflater.inflate(R.menu.bug_list_item_context, menu);
+                inflater.inflate(R.menu.card_list_item_context, menu);
                 return true;
             }
 
@@ -94,7 +99,7 @@ public class CardletActivityFragment extends Fragment {
 
                         for(int i = mAdapter.getCount() - 1; i >= 0; i--){
                             if(getListView().isItemChecked(i)){
-                                cardlet.deleteBug(mAdapter.getItem(i));
+                                cardlet.deleteCard(mAdapter.getItem(i));
                             }
                         }
 
@@ -117,46 +122,45 @@ public class CardletActivityFragment extends Fragment {
 
     private class CardAdapter extends ArrayAdapter<Card> {
 
-        public void setBugs(ArrayList<Card> cards){
+        public CardAdapter(ArrayList<Card> cards){
+            super(getActivity(), 0, cards);
+        }
+
+        public void setCards(ArrayList<Card> cards){
             clear();
             addAll(cards);
         }
 
-        public CardAdapter(ArrayList<Card> cards) {
-            super(getActivity(), 0, cards);
-        }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent){
 
             if(null == convertView){
-                convertView = getActivity().getLayoutInflater().inflate(R.layout.list_item_bug, null);
+                convertView = getActivity().getLayoutInflater().inflate(R.layout.list_item_card, null);
             }
 
             Card card = getItem(position);
 
-            TextView QuestionTextView = convertView.findViewById(R.id.bug_list_item_titleTextView);
+            TextView titleTextView = convertView.findViewById(R.id.card_list_item_titleTextView);
             titleTextView.setText(card.getQuestion());
 
-            TextView AnswerTextView = convertView.findViewById(R.id.bug_list_item_dateTextView);
-           if(card.getAnswer() == 1){ dateTextView.setText("True");} if(card.getAnswer() == 0){ dateTextView.setText("False");}
+            CheckBox YesCheckBox = convertView.findViewById(R.id.card_list_item_yesCheckBox);
+            YesCheckBox.setChecked(card.isYes());
 
+            CheckBox NoCheckBox = convertView.findViewById(R.id.card_list_item_noCheckBox);
+            NoCheckBox.setChecked(card.isNo());
 
             return convertView;
         }
     }
 
-    private static final String TAG = "BugListFragment";
-
-    private ArrayList<Card> mCards;
-
     public CardletActivityFragment() {
         // Required empty public constructor
     }
 
-    private void addBug(){
+    private void addCard(){
         Card card = new Card();
-        cardlet.getInstance(getActivity()).addCard(card);
+        Cardlet.getInstance(getActivity()).addCard(card);
 
         mCallbacks.onCardSelected(card);
     }
@@ -165,13 +169,13 @@ public class CardletActivityFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         super.onCreateOptionsMenu(menu, inflater);
 
-        inflater.inflate(R.menu.menu_bug_list, menu);
+        inflater.inflate(R.menu.menu_card_list, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
-            case R.id.menu_item_add_bug: addBug();  return true;
+            case R.id.menu_item_add_card: addCard();  return true;
 
             default: return super.onOptionsItemSelected(item);
         }
@@ -182,8 +186,8 @@ public class CardletActivityFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
-        getActivity().setTitle(R.string.bug_list_label);
-        mCards = cardlet.getInstance(getActivity()).getCards();
+        getActivity().setTitle(R.string.card_list_label);
+        mCards = Cardlet.getInstance(getActivity()).getCards();
 
         mAdapter = new CardAdapter(mCards);
         setListAdapter(mAdapter);

@@ -3,6 +3,7 @@ package edu.andrews.cptr252.ksolomon.cardlet;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 
 import java.io.File;
@@ -16,55 +17,57 @@ import java.util.UUID;
 public class Cardlet {
 
     private static final String TAG = "Cardlet";
-    private Context mContext;
+    private Context mAppContext;
+    private static Cardlet sOurInstance;
+    private SQLiteDatabase mDatabase;
 
-    public void addBug(Card card){
+    public void addCard(Card card){
         ContentValues values = getContentValues(card);
-        mDatabase.insert(BugTable.NAME, null, values);
+        mDatabase.insert(CardDbSchema.CardTable.NAME, null, values);
     }
 
-    public void updateBug(Card card){
+    public void updateCard(Card card){
         String uuidString = card.getID().toString();
-        ContentValues values = getContentValues(bug);
+        ContentValues values = getContentValues(card);
 
-        mDatabase.update(BugTable.NAME, values, BugTable.Cols.UUID + " =? ", new String[]{uuidString});
+        mDatabase.update(CardDbSchema.CardTable.NAME, values, CardDbSchema.CardTable.Cols.UUID + " =? ", new String[]{uuidString});
     }
-    private BugList(Context appContext){
+    private Cardlet(Context appContext){
 
         mAppContext = appContext.getApplicationContext();
-        mDatabase = new BugDbHelper(mAppContext).getWritableDatabase();
+        mDatabase = new CardDbHelper(mAppContext).getWritableDatabase();
 
     }
 
-    public static BugList getInstance(Context c) {
+    public static Cardlet getInstance(Context c) {
         if (sOurInstance == null){
-            sOurInstance = new BugList(c.getApplicationContext());
+            sOurInstance = new Cardlet(c.getApplicationContext());
         }
         return sOurInstance;
     }
 
-    public ArrayList<Bug> getBugs() {
-        ArrayList<Bug> bugs = new ArrayList<>();
-        BugCursorWrapper cursor = queryBugs(null, null);
+    public ArrayList<Card> getCards() {
+        ArrayList<Card> cards = new ArrayList<>();
+        CardCursorWrapper cursor = queryCards(null, null);
 
         try{
             cursor.moveToFirst();
             while (!cursor.isAfterLast()){
-                bugs.add(cursor.getBug());
+                cards.add(cursor.getCards());
                 cursor.moveToNext();
             }
         } finally {
             cursor.close();
         }
-        return bugs;
+        return cards;
     }
 
 
-    private BugList() {
+    private Cardlet() {
     }
 
-    public Bug getBug(UUID id){
-        BugCursorWrapper cursor = queryBugs(BugTable.Cols.UUID + " =? ", new String[] { id.toString()});
+    public Card getCard(UUID id){
+        CardCursorWrapper cursor = queryCards(CardDbSchema.CardTable.Cols.UUID + " =? ", new String[] { id.toString()});
 
         try{
             if (cursor.getCount() == 0) {
@@ -72,32 +75,31 @@ public class Cardlet {
             }
 
             cursor.moveToFirst();
-            return cursor.getBug();
+            return cursor.getCard();
         } finally {
             cursor.close();
         }
     }
 
-    public void deleteBug(Bug bug){
+    public void deleteCard(Card card){
 
-        String uuidString = bug.getID().toString();
-        mDatabase.delete(BugTable.NAME, BugTable.Cols.UUID + " =? ", new String[] {uuidString});
+        String uuidString = card.getID().toString();
+        mDatabase.delete(CardDbSchema.CardTable.NAME, CardDbSchema.CardTable.Cols.UUID + " =? ", new String[] {uuidString});
     }
 
-    public static ContentValues getContentValues(Bug bug){
+    public static ContentValues getContentValues(Card card){
         ContentValues values = new ContentValues();
-        values.put(BugTable.Cols.UUID, bug.getID().toString());
-        values.put(BugTable.Cols.TITLE, bug.getTitle());
-        values.put(BugTable.Cols.DESCRIPTION, bug.getDescription());
-        values.put(BugTable.Cols.DATE, bug.getDate().getTime());
-        values.put(BugTable.Cols.SOLVED, bug.isSolved() ? 1: 0);
+        values.put(CardDbSchema.CardTable.Cols.UUID, card.getID().toString());
+        values.put(CardDbSchema.CardTable.Cols.TITLE, card.getQuestion());
+        values.put(CardDbSchema.CardTable.Cols.FALSE, card.isNo());
+        values.put(CardDbSchema.CardTable.Cols.TRUE, card.isYes());
 
         return values;
     }
 
-    private BugCursorWrapper queryBugs(String whereClause, String[] whereArgs){
+    private CardCursorWrapper queryBugs(String whereClause, String[] whereArgs){
         Cursor cursor = mDatabase.query(
-                BugTable.NAME,
+                CardDbSchema.CardTable.NAME,
                 null,
                 whereClause,
                 whereArgs,
@@ -105,16 +107,7 @@ public class Cardlet {
                 null,
                 null
         );
-        return new BugCursorWrapper(cursor);
-    }
-
-    public File getPhotoFile(Bug bug){
-        File externalFilesDir = mAppContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-
-        if(externalFilesDir == null) {
-            return null;
-        }
-        return new File(externalFilesDir, bug.getPhotoFilename());
+        return new CardCursorWrapper(cursor);
     }
 
 

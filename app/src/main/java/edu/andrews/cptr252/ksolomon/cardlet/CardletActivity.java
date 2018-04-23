@@ -16,7 +16,7 @@ import android.view.MenuItem;
 public class CardletActivity extends SingleFragmentActivity
         implements CardletActivityFragment.Callbacks, CardletActivityFragment.Callbacks {
 
-    public void onBugSelected(Card card){
+    public void onCardSelected(Card card){
         if(findViewById(R.id.detailFragmentContainer) == null) {
             Intent i = new Intent(this, CardDetailsActivity.class);
             i.putExtra(CardDetailsFragment.EXTRA_BUG_ID, card.getID());
@@ -35,7 +35,7 @@ public class CardletActivity extends SingleFragmentActivity
             ft.commit();
         }
     }
-    public void onBugUpdated(Card card){
+    public void onCardUpdated(Card card){
         FragmentManager fm = getSupportFragmentManager();
         CardletActivityFragment listFragment = (CardletActivityFragment) fm.findFragmentById(R.id.fragment_container);
         listFragment.updateUI();

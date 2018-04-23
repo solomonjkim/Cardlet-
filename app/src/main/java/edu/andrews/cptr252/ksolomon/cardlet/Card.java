@@ -3,7 +3,6 @@ package edu.andrews.cptr252.ksolomon.cardlet;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -11,20 +10,22 @@ import java.util.UUID;
  */
 
 public class Card {
-    private String mQuestion;
-    private int mAnswer;
-    private UUID mId;
+    private String mQuestion; //question that will be used
+    private boolean mYes;
+    private boolean mNo; //answer to the question
+    private UUID mId; //id for storing in database
 
     private static final String JSON_ID = "id";
-    private static final String JSON_QUESTION = "Question";
-    private static final String JSON_ANSWER = "Answer";
+    private static final String JSON_TITLE = "Question";
+    private static final String JSON_YES = "True";
+    private static final String JSON_NO = "False";
 
-    public Bug(UUID id){
-        mId = id;
-    }
+    public Card(UUID id){ mId = id;}
+
     public Card(JSONObject json) throws JSONException{
-        mQuestion = json.getString(JSON_QUESTION);
-        mAnswer = json.getInt(JSON_ANSWER);
+        mQuestion = json.optString(JSON_TITLE);
+        mYes = json.getBoolean(JSON_YES);
+        mNo = json.getBoolean(JSON_NO);
         mId = UUID.fromString(json.getString(JSON_ID);
     }
 
@@ -37,13 +38,14 @@ public class Card {
         JSONObject json = new JSONObject();
 
         json.put(JSON_ID, mId.toString());
-        json.put(JSON_QUESTION, mQuestion);
-        json.put(JSON_ANSWER, mAnswer);
+        json.put(JSON_TITLE, mQuestion);
+        json.put(JSON_YES, mYes);
+        json.put(JSON_NO, mNo);
 
         return json;
     }
 
-    public void setQuestion(int question) {mQuestion = question;}
+    public void setQuestion(String question) {mQuestion = question;}
 
     public String getQuestion(){
         return mQuestion;
@@ -53,7 +55,11 @@ public class Card {
         return mId;
     }
 
-    public int getAnswer() { return mAnswer;}
+    public boolean isYes() { return mYes;}
 
-    public void setAnswer(int answer) {mAnswer = answer;}
+    public void setYes(boolean yet) {mYes = yet; }
+
+    public Boolean isNo(){ return mNo; }
+
+    public void setNo(boolean not){ mNo = not;}
 }
