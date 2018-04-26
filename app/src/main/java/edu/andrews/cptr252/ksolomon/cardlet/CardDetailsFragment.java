@@ -59,7 +59,7 @@ public class CardDetailsFragment extends Fragment {
     @Override
     public void onAttach(Context context){
         super.onAttach(context);
-        mCallbacks = (Callbacks)context;
+       mCallbacks = (Callbacks)context;
     }
 
     /**

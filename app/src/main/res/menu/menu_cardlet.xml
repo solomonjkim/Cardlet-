@@ -6,7 +6,7 @@
 
         android:id="@+id/menu_item_add_card"
         android:icon="@android:drawable/ic_menu_add"
-        android:title="New Card"
+        android:title="NewCard"
         app:showAsAction="always"
 
         />

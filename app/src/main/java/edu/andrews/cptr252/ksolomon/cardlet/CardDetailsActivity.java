@@ -80,7 +80,50 @@ public class CardDetailsActivity extends AppCompatActivity implements CardDetail
 
         }
 
+     mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
+
+        @Override
+        public void onPageScrolled(int i, float v, int i2){
+
+        }
+
+        @Override
+        public void onPageSelected(int position){
+            Card card = mCards.get(position);
+            if(card.getQuestion()!= null){
+                setTitle(card.getQuestion());
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int i){
+
+        }
+    });
+}
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_card_tracker, menu);
+        return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
 
 }

@@ -113,7 +113,7 @@ public class CardletActivityFragment extends ListFragment {
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 switch (item.getItemId()){
-                    case R.id.menu_item_delete_question:
+                    case R.id.menu_item_delete_card:
 
                         Cardlet cardlet = Cardlet.getInstance(getActivity());
 
@@ -137,6 +137,7 @@ public class CardletActivityFragment extends ListFragment {
 
             }
         });
+
         return v;
     }
 
@@ -145,13 +146,13 @@ public class CardletActivityFragment extends ListFragment {
      */
     private class CardAdapter extends ArrayAdapter<Card> {
 
-        public CardAdapter(ArrayList<Card> cards){
-            super(getActivity(), 0, cards);
-        }
-
         public void setCards(ArrayList<Card> cards){
             clear();
             addAll(cards);
+        }
+
+        public CardAdapter(ArrayList<Card> cards){
+            super(getActivity(), 0, cards);
         }
 
         /**
