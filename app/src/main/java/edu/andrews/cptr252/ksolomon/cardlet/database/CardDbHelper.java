@@ -1,4 +1,4 @@
-package edu.andrews.cptr252.ksolomon.cardlet;
+package edu.andrews.cptr252.ksolomon.cardlet.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by solomonjkim on 4/22/18.
  */
 
-public class CardDbHelper {
+public class CardDbHelper extends SQLiteOpenHelper{
     /** Current DB version. Increment as DB structure changes */
     private static final int VERSION = 1;
     /** DB filename */

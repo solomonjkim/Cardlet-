@@ -16,7 +16,11 @@ import java.util.UUID;
  * Created by solomonjkim on 4/19/18.
  */
 
-public class CardDetailsActivity  extends AppCompatActivity implements CardDetailsFragment.Callbacks {
+public class CardDetailsActivity extends AppCompatActivity implements CardDetailsFragment.Callbacks {
+
+    public void onCardUpdated(Card card) {
+
+    }
     private ViewPager mViewPager;
 
     private ArrayList<Card> mCards;
@@ -38,7 +42,7 @@ public class CardDetailsActivity  extends AppCompatActivity implements CardDetai
             @Override
             public Fragment getItem(int position) {
                 Card card = mCards.get(position);
-                return CardDetailsFragment.newInstance(card.getID());
+                return CardDetailsFragment.newInstance(card.getId());
             }
 
             @Override
@@ -47,62 +51,18 @@ public class CardDetailsActivity  extends AppCompatActivity implements CardDetai
             }
         });
 
-        UUID bugId = (UUID) getIntent().getSerializableExtra(CardDetailsFragment.EXTRA_BUG_ID);
+        UUID CardId = (UUID) getIntent().getSerializableExtra(CardDetailsFragment.EXTRA_CARD_ID);
 
 
         for (int i = 0; i < mCards.size(); i++){
-            if(mCards.get(i).getID().equals(bugId)){
+            if(mCards.get(i).getId().equals(CardId)){
                 mViewPager.setCurrentItem(i);
                 break;
             }
 
         }
 
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
-
-            @Override
-            public void onPageScrolled(int i, float v, int i2){
-
-            }
-
-            @Override
-            public void onPageSelected(int position){
-                Card card = mCards.get(position);
-                if(card.getQuestion()!= null){
-                    setQuestion(card.getQuestion());
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i){
-
-            }
-        });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_bug_tracker, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void onCardUpdated(Card card){
-
-    }
 }

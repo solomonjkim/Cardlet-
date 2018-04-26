@@ -35,7 +35,7 @@ import java.util.UUID;
  */
 
 public class CardDetailsFragment extends Fragment {
-    public static final String EXTRA_BUG_ID = "edu.andrews.cptr252.ksolomon.cardlet.card_id";
+    public static final String EXTRA_CARD_ID = "edu.andrews.cptr252.ksolomon.cardlet.card_id";
     public static final String TAG = "CardDetailsFragment";
 
     private Card mCard;

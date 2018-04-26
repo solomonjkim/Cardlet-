@@ -14,19 +14,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class CardletActivity extends SingleFragmentActivity
-        implements CardletActivityFragment.Callbacks, CardletActivityFragment.Callbacks {
+        implements CardletActivityFragment.Callbacks {
 
     public void onCardSelected(Card card){
         if(findViewById(R.id.detailFragmentContainer) == null) {
             Intent i = new Intent(this, CardDetailsActivity.class);
-            i.putExtra(CardDetailsFragment.EXTRA_BUG_ID, card.getID());
+            i.putExtra(CardDetailsFragment.EXTRA_CARD_ID, card.getId());
             startActivityForResult(i, 0);
         } else {
             FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
 
             Fragment oldDetail = fm.findFragmentById(R.id.detailFragmentContainer);
-            Fragment newDetail = CardDetailsFragment.newInstance(Card.getID());
+            Fragment newDetail = CardDetailsFragment.newInstance(card.getId());
 
             if (oldDetail != null){
                 ft.remove(oldDetail);

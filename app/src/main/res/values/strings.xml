@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Cardlet</string>
+    <string name="correct_toast">You are correct</string>
+    <string name="incorrect_toast">You are incorrect</string>
     <string name="action_settings">Settings</string>
+    <string name="true_box">True</string>
+    <string name="false_box">False</string>
+    <string name="question_box">Question Box</string>
+    <string name="card_list_label">Cardlet</string>
+
 </resources>

@@ -1,4 +1,4 @@
-package edu.andrews.cptr252.ksolomon.cardlet;
+package edu.andrews.cptr252.ksolomon.cardlet.database;
 
 /**
  * Created by solomonjkim on 4/22/18.

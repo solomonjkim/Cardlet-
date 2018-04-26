@@ -4,11 +4,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Environment;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.UUID;
+
+import edu.andrews.cptr252.ksolomon.cardlet.database.CardCursorWrapper;
+import edu.andrews.cptr252.ksolomon.cardlet.database.CardDbHelper;
+import edu.andrews.cptr252.ksolomon.cardlet.database.CardDbSchema;
 
 /**
  * Created by solomonjkim on 4/12/18.
@@ -27,7 +29,7 @@ public class Cardlet {
     }
 
     public void updateCard(Card card){
-        String uuidString = card.getID().toString();
+        String uuidString = card.getId().toString();
         ContentValues values = getContentValues(card);
 
         mDatabase.update(CardDbSchema.CardTable.NAME, values, CardDbSchema.CardTable.Cols.UUID + " =? ", new String[]{uuidString});
@@ -48,12 +50,13 @@ public class Cardlet {
 
     public ArrayList<Card> getCards() {
         ArrayList<Card> cards = new ArrayList<>();
+
         CardCursorWrapper cursor = queryCards(null, null);
 
         try{
             cursor.moveToFirst();
             while (!cursor.isAfterLast()){
-                cards.add(cursor.getCards());
+                cards.add(cursor.getCard());
                 cursor.moveToNext();
             }
         } finally {
@@ -83,13 +86,13 @@ public class Cardlet {
 
     public void deleteCard(Card card){
 
-        String uuidString = card.getID().toString();
+        String uuidString = card.getId().toString();
         mDatabase.delete(CardDbSchema.CardTable.NAME, CardDbSchema.CardTable.Cols.UUID + " =? ", new String[] {uuidString});
     }
 
     public static ContentValues getContentValues(Card card){
         ContentValues values = new ContentValues();
-        values.put(CardDbSchema.CardTable.Cols.UUID, card.getID().toString());
+        values.put(CardDbSchema.CardTable.Cols.UUID, card.getId().toString());
         values.put(CardDbSchema.CardTable.Cols.TITLE, card.getQuestion());
         values.put(CardDbSchema.CardTable.Cols.FALSE, card.isNo());
         values.put(CardDbSchema.CardTable.Cols.TRUE, card.isYes());
@@ -97,7 +100,7 @@ public class Cardlet {
         return values;
     }
 
-    private CardCursorWrapper queryBugs(String whereClause, String[] whereArgs){
+    private CardCursorWrapper queryCards(String whereClause, String[] whereArgs){
         Cursor cursor = mDatabase.query(
                 CardDbSchema.CardTable.NAME,
                 null,

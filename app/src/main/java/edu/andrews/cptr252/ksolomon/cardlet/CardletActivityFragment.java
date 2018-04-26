@@ -2,6 +2,7 @@ package edu.andrews.cptr252.ksolomon.cardlet;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ActionMode;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class CardletActivityFragment extends Fragment {
+public class CardletActivityFragment extends ListFragment {
 
 
     private CardAdapter mAdapter;
@@ -52,7 +53,7 @@ public class CardletActivityFragment extends Fragment {
 
     public void updateUI(){
         Cardlet cardlet = Cardlet.getInstance(getActivity());
-        ArrayList<Card> cards = Cardlet.getCards();
+        ArrayList<Card> cards = cardlet.getCards();
 
         if(mAdapter == null){
             mAdapter = new CardAdapter(cards);
@@ -92,7 +93,7 @@ public class CardletActivityFragment extends Fragment {
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 switch (item.getItemId()){
-                    case R.id.menu_item_delete_bug:
+                    case R.id.menu_item_delete_question:
 
                         Cardlet cardlet = Cardlet.getInstance(getActivity());
 
@@ -141,13 +142,13 @@ public class CardletActivityFragment extends Fragment {
 
             Card card = getItem(position);
 
-            TextView titleTextView = convertView.findViewById(R.id.card_list_item_titleTextView);
+            TextView titleTextView = convertView.findViewById(R.id.question_Text);
             titleTextView.setText(card.getQuestion());
 
-            CheckBox YesCheckBox = convertView.findViewById(R.id.card_list_item_yesCheckBox);
+           CheckBox YesCheckBox = convertView.findViewById(R.id.yesCheckBox);
             YesCheckBox.setChecked(card.isYes());
 
-            CheckBox NoCheckBox = convertView.findViewById(R.id.card_list_item_noCheckBox);
+            CheckBox NoCheckBox = convertView.findViewById(R.id.noCheckBox);
             NoCheckBox.setChecked(card.isNo());
 
             return convertView;
@@ -169,7 +170,7 @@ public class CardletActivityFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         super.onCreateOptionsMenu(menu, inflater);
 
-        inflater.inflate(R.menu.menu_card_list, menu);
+        inflater.inflate(R.menu.menu_cardlet, menu);
     }
 
     @Override

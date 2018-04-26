@@ -13,10 +13,7 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
     /** Here we define the fragment */
     protected abstract Fragment createFragment();
 
-    /** This method allows each fragment to continue to run in the background when created
-     *
-     * @param savedInstanceState Bundle object used to save activity state.
-     * */
+    protected int getLayoutResId() {return R.layout.activity_fragment;}
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
