@@ -23,17 +23,26 @@ public class Cardlet {
     private static Cardlet sOurInstance;
     private SQLiteDatabase mDatabase;
 
+    /**
+     * Adds the card to the database
+     * @param card
+     */
     public void addCard(Card card){
         ContentValues values = getContentValues(card);
         mDatabase.insert(CardDbSchema.CardTable.NAME, null, values);
     }
 
+    /**
+     * Updates the card's information based on the information in the database
+     * @param card
+     */
     public void updateCard(Card card){
         String uuidString = card.getId().toString();
         ContentValues values = getContentValues(card);
 
         mDatabase.update(CardDbSchema.CardTable.NAME, values, CardDbSchema.CardTable.Cols.UUID + " =? ", new String[]{uuidString});
     }
+
     private Cardlet(Context appContext){
 
         mAppContext = appContext.getApplicationContext();
@@ -48,6 +57,10 @@ public class Cardlet {
         return sOurInstance;
     }
 
+    /**
+     * Allows for the ArrayList to be managed by the database with the use of a cursor
+     * @return
+     */
     public ArrayList<Card> getCards() {
         ArrayList<Card> cards = new ArrayList<>();
 
@@ -69,6 +82,11 @@ public class Cardlet {
     private Cardlet() {
     }
 
+    /**
+     * Gets the cards from the database with the cursor
+     * @param id
+     * @return
+     */
     public Card getCard(UUID id){
         CardCursorWrapper cursor = queryCards(CardDbSchema.CardTable.Cols.UUID + " =? ", new String[] { id.toString()});
 
@@ -84,12 +102,21 @@ public class Cardlet {
         }
     }
 
+    /**
+     * Delets the given card in the database
+     * @param card
+     */
     public void deleteCard(Card card){
 
         String uuidString = card.getId().toString();
         mDatabase.delete(CardDbSchema.CardTable.NAME, CardDbSchema.CardTable.Cols.UUID + " =? ", new String[] {uuidString});
     }
 
+    /**
+     * Gets all of the different values from the given card in the database
+     * @param card
+     * @return
+     */
     public static ContentValues getContentValues(Card card){
         ContentValues values = new ContentValues();
         values.put(CardDbSchema.CardTable.Cols.UUID, card.getId().toString());
@@ -100,6 +127,12 @@ public class Cardlet {
         return values;
     }
 
+    /**
+     * Creates the cursor and allows for it to search or query through the database
+     * @param whereClause
+     * @param whereArgs
+     * @return
+     */
     private CardCursorWrapper queryCards(String whereClause, String[] whereArgs){
         Cursor cursor = mDatabase.query(
                 CardDbSchema.CardTable.NAME,

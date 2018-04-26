@@ -15,6 +15,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 /**
+ * This class creates the QuizActivity section and layout. Lets the user interact with the different buttons
  * Created by solomonjkim on 4/12/18.
  */
 
@@ -28,6 +29,10 @@ public class QuizActivity extends AppCompatActivity{
 
     private static final String KEY_INDEX ="index";
 
+    /**
+     * On creation this method connects the 4 buttons to move through the ArrayList of cards created in Cardlet
+     * @param savedInstanceState
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);

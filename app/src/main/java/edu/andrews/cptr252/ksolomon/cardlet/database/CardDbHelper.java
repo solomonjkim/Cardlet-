@@ -19,7 +19,7 @@ public class CardDbHelper extends SQLiteOpenHelper{
     }
 
     /**
-     * DB does not exist. Create it
+     * Creating the database
      * @param db will contain the newly created database.
      */
     @Override

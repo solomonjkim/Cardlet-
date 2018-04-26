@@ -4,13 +4,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
-/** This class allows us to reference the fragments in AuthorFactActivity and QuoteActivity
- * @author Solomon Kim
- * @since 03/11/18.
+/** This class allows us to reference the other fragments
+ * Created by solomonjkim on 4/12/18.
  */
 public abstract class SingleFragmentActivity extends AppCompatActivity {
 
-    /** Here we define the fragment */
+    /** Making the fragment */
     protected abstract Fragment createFragment();
 
     protected int getLayoutResId() {return R.layout.activity_fragment;}

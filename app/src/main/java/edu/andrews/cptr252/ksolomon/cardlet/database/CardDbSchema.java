@@ -9,7 +9,7 @@ public class CardDbSchema {
         public static final String NAME = "cards";
 
         /**
-         * DB column names
+         * Column names
          */
         public static final class Cols {
             public static final String UUID = "uuid";

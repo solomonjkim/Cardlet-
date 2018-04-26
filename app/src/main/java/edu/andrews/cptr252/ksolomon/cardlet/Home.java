@@ -14,7 +14,7 @@ public class Home extends AppCompatActivity{
     private Button mListButton;
     private Button mStartButton;
     /**
-     * Initializes the display of the home page
+     * Creates the display for the home page
      * @param savedInstanceState
      */
     @Override

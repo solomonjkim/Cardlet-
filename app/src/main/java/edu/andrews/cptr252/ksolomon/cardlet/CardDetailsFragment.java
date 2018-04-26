@@ -31,6 +31,7 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
+ * This fragment houses the user interaction functions and the setting of the questions and answers
  * Created by solomonjkim on 4/19/18.
  */
 
@@ -43,28 +44,44 @@ public class CardDetailsFragment extends Fragment {
     private CheckBox mTrue;
     private CheckBox mFalse;
 
+    /**
+     * Interface used for the callbacks in order to keep the cards updated
+      */
     public interface Callbacks {
         void onCardUpdated(Card card);
     }
     private Callbacks mCallbacks;
 
+    /**
+     * Attaches the context to the callback
+     * @param context
+     */
     @Override
     public void onAttach(Context context){
         super.onAttach(context);
         mCallbacks = (Callbacks)context;
     }
 
+    /**
+     * When the fragment detaches the callback must be set to null to quit
+     */
     @Override
     public void onDetach(){
         super.onDetach();
         mCallbacks = null;
     }
 
-
+    /**
+     * Updates the cards on the list when the details are changed on a card
+     */
     public void updateCard(){
         Cardlet.getInstance(getActivity()).updateCard(mCard);
         mCallbacks.onCardUpdated(mCard);
     }
+
+    /**
+     * Pauses the activity
+     */
 
     @Override
     public void onPause() {
@@ -72,6 +89,11 @@ public class CardDetailsFragment extends Fragment {
         Cardlet.getInstance(getActivity()).updateCard(mCard);
     }
 
+    /**
+     * Creates a new instance of the fragment and gives the bundle with the id of the cards to the fragment
+     * @param CardId
+     * @return
+     */
     public static CardDetailsFragment newInstance(UUID CardId){
         Bundle args = new Bundle();
         args.putSerializable(EXTRA_CARD_ID, CardId);
@@ -84,6 +106,10 @@ public class CardDetailsFragment extends Fragment {
     public CardDetailsFragment() {
     }
 
+    /**
+     * When created this page gets the card's information from the instance of the Activity with the id
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -93,6 +119,15 @@ public class CardDetailsFragment extends Fragment {
         mCard = Cardlet.getInstance(getActivity()).getCard(CardId);
     }
 
+    /**
+     * Initializes the fragment view and allows for the question to be set referencing the Card class
+     * and makes sure to check if the user selects for either the True or False boxes to set the answer
+     * for the new question.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

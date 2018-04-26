@@ -21,7 +21,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- * A placeholder fragment containing a simple view.
+ * This fragment manages the list design and individual cards in the list
+ * Created by solomonjkim on 4/12/18.
  */
 public class CardletActivityFragment extends ListFragment {
 
@@ -32,7 +33,7 @@ public class CardletActivityFragment extends ListFragment {
     private CheckBox mNoCheckBox;
     private static final String TAG = "CardletActivityFragment";
 
-
+//all the same as in the CardDetailsFragment
     public interface Callbacks {
         void onCardSelected(Card card);
     }
@@ -51,6 +52,10 @@ public class CardletActivityFragment extends ListFragment {
         mCallbacks = null;
     }
 
+    /**
+     * Updates the cards based on the ArrayList of cards. The adapter allows for the data
+     * to be displayed as a list
+     */
     public void updateUI(){
         Cardlet cardlet = Cardlet.getInstance(getActivity());
         ArrayList<Card> cards = cardlet.getCards();
@@ -65,6 +70,14 @@ public class CardletActivityFragment extends ListFragment {
         }
     }
 
+    /**
+     * When created, the view creates a new listview and connects the function of adding a new card to the list from
+     * the menu
+     * @param inflater
+     * @param parent
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState){
         View v = super.onCreateView(inflater, parent, savedInstanceState);
@@ -75,6 +88,7 @@ public class CardletActivityFragment extends ListFragment {
 
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+
             @Override
             public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
 
@@ -90,6 +104,12 @@ public class CardletActivityFragment extends ListFragment {
                 return false;
             }
 
+            /**
+             * When the card is clicked the card can be deleted
+             * @param mode
+             * @param item
+             * @return
+             */
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 switch (item.getItemId()){
@@ -120,7 +140,9 @@ public class CardletActivityFragment extends ListFragment {
         return v;
     }
 
-
+    /**
+     * This class allows for the Card ArrayList to be accessed and creates the ArrayList
+     */
     private class CardAdapter extends ArrayAdapter<Card> {
 
         public CardAdapter(ArrayList<Card> cards){
@@ -132,7 +154,13 @@ public class CardletActivityFragment extends ListFragment {
             addAll(cards);
         }
 
-
+        /**
+         * This method allows for each card to be displayed on the list
+         * @param position
+         * @param convertView
+         * @param parent
+         * @return
+         */
         @Override
         public View getView(int position, View convertView, ViewGroup parent){
 
@@ -159,6 +187,9 @@ public class CardletActivityFragment extends ListFragment {
         // Required empty public constructor
     }
 
+    /**
+     * Adds a card to the data set made in Cardlet
+     */
     private void addCard(){
         Card card = new Card();
         Cardlet.getInstance(getActivity()).addCard(card);
@@ -173,6 +204,11 @@ public class CardletActivityFragment extends ListFragment {
         inflater.inflate(R.menu.menu_cardlet, menu);
     }
 
+    /**
+     * Allows for the user to add a card to the list with the add button on the menu
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
